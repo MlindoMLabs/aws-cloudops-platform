@@ -1,0 +1,26 @@
+output "instance_id" {
+  description	= "ID of the launched EC2 instance"
+  value		= aws_instance.app_node.id
+}
+
+
+output "public_ip" {
+  description	= "Public IP address of the EC2 instance"
+  value		= aws_instance.app_node.public_ip
+}
+
+output "security_group_is" {
+  description	= "Security Groyp ID attached to EC2"
+  value		= aws_security_group.ec2_sg.id
+}
+
+output "security_group_id" {
+  description = "Security Group ID for EC2 instances"
+  value       = aws_security_group.ec2_sg.id
+}
+
+output "iam_instance_profile_name" {
+  description = "IAM Instance Profile Name for EC2 instances"
+  value       = aws_iam_instance_profile.ec2_profile.name # Replace with your actual aws_iam_instance_profile resource name if different
+}
+
