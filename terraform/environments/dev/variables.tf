@@ -51,3 +51,8 @@ variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
+
+variable "github_repo" {
+  description = "GitHub repository formatted as owner/repo (e.g. my-org/aws-cloudops-platform)"
+  type        = string
+}

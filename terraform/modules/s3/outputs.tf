@@ -7,5 +7,6 @@ output "bucket_arn" {
 }
 
 output "bucket_domain_name" {
-  value = aws_s3_bucket.this.bucket_domain_regional_name
+  description = "The domain name of the S3 bucket"
+  value       = aws_s3_bucket.this.bucket_regional_domain_name
 }

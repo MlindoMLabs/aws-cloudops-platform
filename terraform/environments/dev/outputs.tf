@@ -41,3 +41,8 @@ output "s3_app_storage_bucket" {
   value       = module.app_storage.bucket_id
   description = "Application storage S3 bucket name"
 }
+
+output "github_actions_role_arn" {
+  value       = module.github_oidc.role_arn
+  description = "Role ARN to configure in GitHub Secrets"
+}

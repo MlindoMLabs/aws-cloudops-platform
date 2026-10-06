@@ -87,3 +87,9 @@ module "app_storage" {
   versioning_enabled = true
   force_destroy      = true # Set to true for dev cleanup convenience
 }
+
+module "github_oidc" {
+  source      = "../../modules/github_oidc"
+  environment = var.environment
+  github_repo = var.github_repo # Passes variable from environment root
+}
