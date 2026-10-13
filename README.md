@@ -19,11 +19,8 @@ The platform deploys a secure 3-tier web architecture across multiple availabili
 * **Private Database Tier**: Multi-AZ RDS PostgreSQL instance isolated from direct public access, communicating solely with the application security group.
 * **Security & Governance**: AWS Secrets Manager for credential management, CloudWatch for central logging/alarms, CloudTrail for API auditing, and Customer-Managed KMS Keys for encryption.
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> develop
 * Internet
                  │
                  ▼
@@ -47,10 +44,7 @@ The platform deploys a secure 3-tier web architecture across multiple availabili
            └─────────────┘
 ---
 
-<<<<<<< HEAD
 
-=======
->>>>>>> develop
 ## 📂 Project Structure
 
 ```tree
