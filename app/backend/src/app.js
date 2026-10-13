@@ -51,3 +51,55 @@ app.listen(PORT, async () => {
   console.log(`[SERVER] Backend operational on port ${PORT} [Mode: ${process.env.NODE_ENV || 'development'}]`);
   await initDb();
 });
+
+
+const express = require('express');
+const cors = require('cors');
+
+// Import Module Routes
+const userRoutes = require('./modules/users/user.routes');
+const taskRoutes = require('./modules/tasks/task.routes');
+
+const app = express();
+
+// --- Core Middleware ---
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// --- Health Check Endpoint ---
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'UP',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// --- Mount Feature Module Routes ---
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/tasks', taskRoutes);
+
+// --- 404 Route Not Found Handler ---
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    error: `Cannot ${req.method} ${req.originalUrl}`
+  });
+});
+
+// --- Global Centralized Error Handler ---
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err);
+
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(statusCode).json({
+    success: false,
+    error: message,
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+module.exports = app;

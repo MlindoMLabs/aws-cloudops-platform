@@ -37,3 +37,17 @@ docker/data/
 .idea/
 *.swp
 *.swo
+
+
+# Terraform generated plans and state
+*.tfplan
+tfplan
+terraform.tfstate
+terraform.tfstate.*
+crash.log
+crash.*.log
+
+# Terraform local files
+.terraform/
+*.tfvars
+*.tfvars.json
