@@ -93,3 +93,26 @@ module "github_oidc" {
   environment = var.environment
   github_repo = var.github_repo # Passes variable from environment root
 }
+
+module "cloudwatch" {
+  source             = "../../modules/cloudwatch"
+  environment        = var.environment
+  aws_region         = var.aws_region
+  log_retention_days = 14
+  asg_name           = module.asg.asg_name
+  db_instance_id     = module.rds.db_instance_id
+}
+
+module "cloudtrail" {
+  source      = "../../modules/cloudtrail"
+  environment = var.environment
+}
+
+module "secrets" {
+  source      = "../../modules/secrets"
+  environment = var.environment
+  db_host     = module.rds.db_instance_endpoint
+  db_port     = 5432
+  db_name     = "cloudops_db"
+  db_username = "cloudops_user"
+}

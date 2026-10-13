@@ -58,3 +58,4 @@ resource "aws_autoscaling_group" "app" {
     create_before_destroy = true
   }
 }
+

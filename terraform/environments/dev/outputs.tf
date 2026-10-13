@@ -46,3 +46,21 @@ output "github_actions_role_arn" {
   value       = module.github_oidc.role_arn
   description = "Role ARN to configure in GitHub Secrets"
 }
+
+output "cloudwatch_log_group" {
+  value = module.cloudwatch.log_group_name
+}
+
+output "cloudwatch_dashboard_name" {
+  value = "cloudops-dashboard-${var.environment}"
+}
+
+output "audit_s3_bucket" {
+  value       = module.cloudtrail.audit_bucket_name
+  description = "CloudTrail audit log S3 bucket name"
+}
+
+output "secrets_manager_secret_arn" {
+  value       = module.secrets.secret_arn
+  description = "ARN of stored database secret"
+}

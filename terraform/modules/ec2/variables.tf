@@ -28,3 +28,4 @@ variable "secrets_policy_arn" {
   description = "ARN of the Secrets Manager IAM Policy from the RDS module"
   type        = string
 }
+

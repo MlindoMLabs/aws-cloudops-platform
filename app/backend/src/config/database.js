@@ -76,4 +76,12 @@ async function initDb() {
   }
 }
 
-module.exports = { getPool, initDb };
+module.exports = {
+  getPool,
+  initDb,
+  // Convenience helper wrapper so existing model queries work seamlessly
+  query: async (text, params) => {
+    const pool = await getPool();
+    return pool.query(text, params);
+  },
+};

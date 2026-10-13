@@ -27,7 +27,7 @@ resource "aws_security_group" "rds" {
     description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
-    protocol    ="-1"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -62,7 +62,7 @@ resource "aws_db_parameter_group" "this" {
 resource "aws_db_instance" "this" {
   identifier     = "${var.environment}-cloudops-postgres"
   engine         = "postgres"
-  engine_version = "16.1"
+  engine_version = "16" # Updated to major version so AWS handles minor version patches automatically
 
   instance_class        = var.instance_class
   allocated_storage     = var.allocated_storage
@@ -82,9 +82,9 @@ resource "aws_db_instance" "this" {
   multi_az            = var.multi_az
   skip_final_snapshot = true # Set to false for production setups
 
-  backup_retention_period   = 7
-  backup_window             = "03:00-04:00"
-  maintenance_window        = "Mon:04:30-Mon:05:30"
+  backup_retention_period    = 0
+  backup_window              = "03:00-04:00"
+  maintenance_window         = "Mon:04:30-Mon:05:30"
   auto_minor_version_upgrade = true
 
   deletion_protection = false
@@ -94,7 +94,6 @@ resource "aws_db_instance" "this" {
     Environment = var.environment
   }
 }
-
 
 # Create the Secrets Manager secret container
 resource "aws_secretsmanager_secret" "db_credentials" {

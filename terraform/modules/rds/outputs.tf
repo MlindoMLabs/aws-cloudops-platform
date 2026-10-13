@@ -22,3 +22,8 @@ output "secrets_policy_arn" {
   description = "ARN of the Secrets Manager IAM Policy"
   value       = aws_iam_policy.secrets_access.arn
 }
+
+output "db_instance_id" {
+  description = "The RDS instance identifier"
+  value       = aws_db_instance.this.id
+}

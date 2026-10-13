@@ -1,6 +1,14 @@
-# Fetch GitHub's OIDC OpenID Provider details
-data "aws_iam_openid_connect_provider" "github" {
+# Create the GitHub OIDC OpenID Connect Provider
+resource "aws_iam_openid_connect_provider" "github" {
   url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1", # GitHub Actions OIDC thumbprint
+  ]
 }
 
 # IAM Role for GitHub Actions
@@ -13,7 +21,7 @@ resource "aws_iam_role" "github_actions" {
       {
         Effect = "Allow"
         Principal = {
-          Federated = data.aws_iam_openid_connect_provider.github.arn
+          Federated = aws_iam_openid_connect_provider.github.arn # Updated from data to resource reference
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
@@ -21,7 +29,6 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            # Scope role assumption strictly to your GitHub repository
             "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*"
           }
         }

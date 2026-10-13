@@ -107,11 +107,11 @@ locals {
 
 # 5. Launch EC2 Instance in Public Subnet
 resource "aws_instance" "app_node" {
-  ami                  = data.aws_ami.ubuntu.id
-  instance_type        = var.instance_type
-  subnet_id            = var.public_subnet_ids[0]
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = var.public_subnet_ids[0]
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
-  iam_instance_profile = aws_iam_instance_profile.ec2_profile.name
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
 
   user_data = local.user_data
 
@@ -140,4 +140,40 @@ resource "aws_security_group_rule" "allow_alb_to_ec2" {
 resource "aws_iam_role_policy_attachment" "attach_secrets_policy" {
   role       = aws_iam_role.ec2_ssm_role.name
   policy_arn = var.secrets_policy_arn
+}
+
+# In terraform/modules/ec2/main.tf
+resource "aws_iam_role_policy_attachment" "cloudwatch_agent" {
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_policy" "ec2_least_privilege" {
+  name        = "${var.environment}-ec2-least-privilege-policy"
+  description = "Least privilege access policy for EC2 runtime"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowReadingDatabaseSecret"
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = var.secrets_policy_arn
+      },
+      {
+        Sid    = "AllowCloudWatchLogs"
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      }
+    ]
+  })
 }
